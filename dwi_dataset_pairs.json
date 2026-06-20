@@ -1,0 +1,206 @@
+[
+  {
+    "image": "Extracted_DWI/dwi_B2_P10_Segmented_P10_DWI_806 dDWI_0-600 ADC.nii.gz",
+    "label": "Extracted_DWI/dwi_B2_P10_Segmented_P10_DWI_Segmentation.nrrd",
+    "patient_id": "P10",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B2_P11_Segmented_P11_DWI_1004 epi_dwi_microV_tra_3b_cDWI_b2000_2.nii.gz",
+    "label": "Extracted_DWI/dwi_B2_P11_Segmented_P11_DWI_Segmentation_1.nrrd",
+    "patient_id": "P11",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B2_P12_Segmented_P12-DWI_1301 epi_dwi_microV_tra_3b_b50.nii.gz",
+    "label": "Extracted_DWI/dwi_B2_P12_Segmented_P12-DWI_Segmentation.nrrd",
+    "patient_id": "P12",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B2_P15_Segmented_P15_DWI_803 epi_dwi_tra_b50_1500_2000_b2000.nii.gz",
+    "label": "Extracted_DWI/dwi_B2_P15_Segmented_P15_DWI_Segmentation.nrrd",
+    "patient_id": "P15",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B2_P16_Segmented_P16_DWI_705 epi_dwi_microV_tra_3b_cDWI_b2000.nii.gz",
+    "label": "Extracted_DWI/dwi_B2_P16_Segmented_P16_DWI_Segmentation.nrrd",
+    "patient_id": "P16",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B2_P17_Segmented_P17_DWI_1301 epi_dwi_microV_tra_3b_b50.nii.gz",
+    "label": "Extracted_DWI/dwi_B2_P17_Segmented_P17_DWI_Segmentation.nrrd",
+    "patient_id": "P17",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B2_P18_Segmented_P18_Dwi_902 epi_dwi_tra_b50_1500_2000_b1500.nii.gz",
+    "label": "Extracted_DWI/dwi_B2_P18_Segmented_P18_Dwi_Segmentation.nrrd",
+    "patient_id": "P18",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B2_P1_Segmented (NEW)_P1_DWI_1004 epi_dwi_microV_tra_3b_cDWI_b2000.nii.gz",
+    "label": "Extracted_DWI/dwi_B1_P1_Segmented_P1_DWILabelled_P1_DWIImage.nii.gz",
+    "patient_id": "P1",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B2_P20_Segmented_P20_DWI_1001 epi_dwi_microV_tra_3b_b50.nii.gz",
+    "label": "Extracted_DWI/dwi_B2_P20_Segmented_P20_DWI_Segmentation.nrrd",
+    "patient_id": "P20",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B2_P22_Segmented_P22_DWI_1301 epi_dwi_microV_tra_3b_b50.nii.gz",
+    "label": "Extracted_DWI/dwi_B2_P22_Segmented_P22_DWI_Segmentation.nrrd",
+    "patient_id": "P22",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B2_P23_Segmented_P23_DWI_1004 epi_dwi_microV_tra_3b_cDWI_b2000.nii.gz",
+    "label": "Extracted_DWI/dwi_B2_P23_Segmented_P23_DWI_Segmentation.nrrd",
+    "patient_id": "P23",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B2_P24_Segmented_P24_DWI_1204 epi_dwi_microV_tra_3b_cDWI_b2000.nii.gz",
+    "label": "Extracted_DWI/dwi_B2_P24_Segmented_P24_DWI_Segmentation.nrrd",
+    "patient_id": "P24",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B2_P25_Segmented_P25_DWI_1004 epi_dwi_microV_tra_3b_cDWI_b2000.nii.gz",
+    "label": "Extracted_DWI/dwi_B2_P25_Segmented_P25_DWI_Segmentation.nrrd",
+    "patient_id": "P25",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B2_P2_Segmented (NEW)_P2_DWI_705 epi_dwi_microV_tra_3b_cDWI_b2000.nii.gz",
+    "label": "Extracted_DWI/dwi_B31_P2_Segmented_P2_DWI LABELLED_1003 epi_dwi_microV_tra_3b_b2000.nrrd",
+    "patient_id": "P2",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B2_P3_Segmented (NEW)_P2_DWI_803 epi_dwi_tra_b50_1500_2000_b2000.nii.gz",
+    "label": "Extracted_DWI/dwi_B2_P3_Segmented (NEW)_P2_DWI_Segmentation.nrrd",
+    "patient_id": "P3",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B2_P4_Segmented_P4_DWI_1004 epi_dwi_microV_tra_3b_cDWI_b2000_1.nii.gz",
+    "label": "Extracted_DWI/dwi_B2_P4_Segmented_P4_DWI_Segmentation_1.nrrd",
+    "patient_id": "P4",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B2_P5_Segmented_P5_DWI_1204 epi_dwi_microV_tra_3b_cDWI_b2000.nii.gz",
+    "label": "Extracted_DWI/dwi_B2_P5_Segmented_P5_DWI_Segmentation.nrrd",
+    "patient_id": "P5",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B2_P6_Segmented_P6_DWI_1004 epi_dwi_microV_tra_3b_cDWI_b2000.nii.gz",
+    "label": "Extracted_DWI/dwi_B2_P6_Segmented_P6_DWI_Segmentation.nrrd",
+    "patient_id": "P6",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B2_P7_Segmented_P7_DWI_803 epi_dwi_tra_b50_1500_2000_b2000.nii.gz",
+    "label": "Extracted_DWI/dwi_B2_P7_Segmented_P7_DWI_Segmentation.nrrd",
+    "patient_id": "P7",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B2_P8_Segmented_P8_DWI_1204 epi_dwi_microV_tra_3b_cDWI_b2000.nii.gz",
+    "label": "Extracted_DWI/dwi_B2_P8_Segmented_P8_DWI_Segmentation.nrrd",
+    "patient_id": "P8",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B31_P10_Segmented_P10_DWI_806 dDWI_0-600 ADC.nii.gz",
+    "label": "Extracted_DWI/dwi_B31_P10_Segmented_P10_DWI_Segmentation.nrrd",
+    "patient_id": "P10",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B31_P4_Segmented_P4_DWI_1004 epi_dwi_microV_tra_3b_cDWI_b2000_1.nii.gz",
+    "label": "Extracted_DWI/dwi_B31_P4_Segmented_P4_DWI_Segmentation_1.nrrd",
+    "patient_id": "P4",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B31_P5_Segmented_P5_DWI_1204 epi_dwi_microV_tra_3b_cDWI_b2000.nii.gz",
+    "label": "Extracted_DWI/dwi_B31_P5_Segmented_P5_DWI_Segmentation.nrrd",
+    "patient_id": "P5",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B31_P6_Segmented_P6_DWI_1004 epi_dwi_microV_tra_3b_cDWI_b2000.nii.gz",
+    "label": "Extracted_DWI/dwi_B31_P6_Segmented_P6_DWI_Segmentation.nrrd",
+    "patient_id": "P6",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B31_P7_Segmented_P7_DWI_803 epi_dwi_tra_b50_1500_2000_b2000.nii.gz",
+    "label": "Extracted_DWI/dwi_B31_P7_Segmented_P7_DWI_Segmentation.nrrd",
+    "patient_id": "P7",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B31_P8_Segmented_P8_DWI_1204 epi_dwi_microV_tra_3b_cDWI_b2000.nii.gz",
+    "label": "Extracted_DWI/dwi_B31_P8_Segmented_P8_DWI_Segmentation.nrrd",
+    "patient_id": "P8",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B32_P1_Segmented_P1_DWI_1601 epi_dwi_microV_tra_3b_b50.nii.gz",
+    "label": "Extracted_DWI/dwi_B31_P1_Segmented_P1_DWILABELLED_1603 epi_dwi_microV_tra_3b_b2000.nrrd",
+    "patient_id": "P1",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B32_P2_Segmented_P2_DWI_701 epi_dwi_microV_tra_3b_b50.nii.gz",
+    "label": "Extracted_DWI/dwi_B31_P2_Segmented_P2_DWI LABELLED_Segmentation.seg.nrrd",
+    "patient_id": "P2",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B32_P3_Segmented_P3_DWI_1001 epi_dwi_microV_tra_3b_b50.nii.gz",
+    "label": "Extracted_DWI/dwi_B32_P3_Segmented_P3_DWI_Segmentation.nrrd",
+    "patient_id": "P3",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B32_P4_Segmented_P4_DWI_1001 epi_dwi_microV_tra_3b_b50.nii.gz",
+    "label": "Extracted_DWI/dwi_B32_P4_Segmented_P4_DWI_Segmentation.nrrd",
+    "patient_id": "P4",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B32_P5_Segmented_P5_DWI_1201 epi_dwi_microV_tra_3b_b50.nii.gz",
+    "label": "Extracted_DWI/dwi_B32_P5_Segmented_P5_DWI_Segmentation.nrrd",
+    "patient_id": "P5",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B32_P7_Segmented_P7_DWI_801 epi_dwi_tra_b50_1500_2000_b50.nii.gz",
+    "label": "Extracted_DWI/dwi_B32_P7_Segmented_P7_DWI_Segmentation.nrrd",
+    "patient_id": "P7",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B32_P9_Segmented_P9_DWI_1201 epi_dwi_microV_tra_3b_b50.nii.gz",
+    "label": "Extracted_DWI/dwi_B32_P9_Segmented_P9_DWI_Segmentation.nrrd",
+    "patient_id": "P9",
+    "match_type": "exact_patient_match"
+  },
+  {
+    "image": "Extracted_DWI/dwi_B32_P6_Segmented_P6_DWI_1001 epi_dwi_microV_tra_3b_b50.nii.gz",
+    "label": "Extracted_DWI/dwi_B32_P6_Segmented_P6_DWI_Segmentation.nrrd",
+    "patient_id": "P6",
+    "match_type": "exact_patient_match"
+  }
+]

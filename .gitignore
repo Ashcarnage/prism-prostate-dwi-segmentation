@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Large data — not committed
+Extracted_DWI/
+preprocessed_dwi_data/
+segmentation_results/
+experiments/
+wandb/
+log/
+
+# Archive & generated outputs
+*.zip
+*.tar.gz
+
+# PDFs
+*.pdf
+
+# Jupyter
+.ipynb_checkpoints/
+
+# macOS
+.DS_Store
+.AppleDouble
+
+# IDE
+.vscode/
+.idea/
+*.suo
+*.user
+
+# Secrets / env
+.env
+.env.*
+*.key

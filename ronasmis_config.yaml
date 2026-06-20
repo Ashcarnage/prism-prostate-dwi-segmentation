@@ -1,0 +1,66 @@
+# RONASMIS Configuration for RTX 5090 and DWI Data
+dataset:
+  name: "DWI_Segmentation"
+  data_path: "./Extracted_DWI/"
+  image_formats: [".nii.gz", ".nrrd"]
+  num_classes: 2  # Background + foreground segmentation
+  
+# Search space configuration (macro search)
+search_space:
+  patch_size_factors: [0, 1, 2, 3, 4]  # 5 options for patch size calculation
+  pooling_strides: [1, 2]  # Pooling stride options
+  dilation_rates: [1, 2, 3]  # Dilation rate options
+  activation_functions: ["relu", "leaky_relu", "elu"]  # 3 activation options
+  skip_connection_options: 6  # Number of possible skip connections
+  drop_path_options: 4  # Number of drop-path locations
+
+# Controller configuration (LSTM-based RL)
+controller:
+  lstm_hidden_size: 100
+  lstm_num_layers: 2
+  learning_rate: 0.001
+  weight_decay: 0.000001
+  entropy_weight: 0.0001
+  reward_baseline_decay: 0.99
+
+# Training configuration optimized for RTX 5090
+training:
+  episodes: 300  # Increased for RTX 5090 capability
+  child_epochs_per_episode: 3
+  child_networks_per_episode: 20
+  batch_size: 4  # Increased for RTX 5090 (24GB VRAM)
+  learning_rate: 0.001
+  weight_decay: 0.00001
+  gradient_clip: 5.0
+  
+# Hardware optimization for RTX 5090
+hardware:
+  device: "cuda"
+  mixed_precision: true  # Use AMP for faster training
+  max_memory_fraction: 0.9  # Use 90% of 24GB VRAM
+  num_workers: 8  # Increased for better data loading
+  pin_memory: true
+
+# Architecture base settings
+architecture:
+  base_channels: 32  # Increased for RTX 5090
+  max_channels: 512
+  encoder_stages: 4
+  decoder_stages: 4
+  use_instance_norm: true  # Better for medical images
+  use_deep_supervision: true
+
+# Data preprocessing
+preprocessing:
+  normalize_method: "z_score"  # Per-channel Z-score normalization
+  crop_background: true  # Remove zero padding
+  intensity_clipping: [0.5, 99.5]  # Percentile clipping
+  resample_spacing: null  # Keep original spacing
+
+# Logging and monitoring
+logging:
+  use_wandb: true
+  project_name: "RONASMIS_DWI"
+  log_frequency: 10
+  save_checkpoints: true
+  checkpoint_frequency: 50 

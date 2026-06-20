@@ -1,0 +1,59 @@
+# RONASMIS: Resource Optimized Neural Architecture Search
+# Requirements for 3D Medical Image Segmentation
+# Optimized for RTX 5090 GPU training
+
+# Core PyTorch and deep learning
+torch>=2.0.0
+torchvision>=0.15.0
+torchaudio>=2.0.0
+
+# Medical image processing
+nibabel>=5.1.0
+SimpleITK>=2.2.0
+scikit-image>=0.21.0
+nrrd>=0.4.3
+pydicom>=2.4.0
+
+# Scientific computing
+numpy>=1.24.0
+scipy>=1.10.0
+pandas>=2.0.0
+
+# Machine learning utilities
+scikit-learn>=1.3.0
+
+# Visualization and monitoring
+matplotlib>=3.7.0
+seaborn>=0.12.0
+plotly>=5.15.0
+tensorboard>=2.13.0
+wandb>=0.15.0
+
+# Progress and UI
+tqdm>=4.65.0
+termcolor>=2.3.0
+
+# Configuration and utilities
+pyyaml>=6.0
+h5py>=3.9.0
+Pillow>=10.0.0
+
+# Optional: For enhanced performance
+numba>=0.57.0
+einops>=0.6.0
+
+# Development tools (optional)
+pytest>=7.4.0
+black>=23.7.0
+flake8>=6.0.0
+
+# For notebook compatibility (optional)
+jupyter>=1.0.0
+ipywidgets>=8.0.0
+
+# Memory profiling (optional)
+memory-profiler>=0.61.0
+
+# Additional utilities
+opencv-python>=4.8.0
+requests>=2.31.0 
