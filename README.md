@@ -1,12 +1,12 @@
-# RONASMIS — Resource Optimized Neural Architecture Search for 3D Medical Image Segmentation
+# PRISM — Prostate Reinforcement Image Segmentation Model
 
-A reinforcement learning framework that automatically discovers efficient 3D U-Net architectures for brain MRI segmentation. The entire search runs on a single GPU in under 2 days.
+A reinforcement learning framework that automatically discovers efficient 3D U-Net architectures for prostate cancer segmentation from Diffusion-Weighted Imaging (DWI) MRI. The entire architecture search runs on a single GPU in under 2 days.
 
 ---
 
 ## What this does
 
-Standard Neural Architecture Search for 3D medical images is prohibitively expensive — millions of candidate networks, each requiring hours of training. RONASMIS solves this with three key ideas:
+Standard Neural Architecture Search for 3D medical images is prohibitively expensive — millions of candidate networks, each requiring hours of training. PRISM solves this with three key ideas:
 
 | Innovation | Benefit |
 |---|---|
@@ -14,7 +14,7 @@ Standard Neural Architecture Search for 3D medical images is prohibitively expen
 | **Parameter sharing** | Shared weight bank across all child networks — no training from scratch → 8× speedup |
 | **Element-wise skip connections** | Sum instead of concatenation in U-Net skip paths → 50% memory saving with comparable accuracy |
 
-An LSTM controller generates architecture decisions, trains a candidate network using shared weights, evaluates its Dice score, and updates via REINFORCE. After 150–300 episodes the best-found architecture is retrained fully.
+An LSTM controller generates architecture decisions, trains a candidate network using shared weights, evaluates its Dice score, and updates via REINFORCE. After 150–300 episodes the best-found architecture is used for full inference.
 
 ---
 
@@ -28,14 +28,14 @@ An LSTM controller generates architecture decisions, trains a candidate network 
 | Inference time | 7.8ms / volume |
 | Total search time | ~33.6 hours on RTX 5090 |
 
-**Discovered architecture**: 64×64×32 patches · LeakyReLU · stride-2 pooling in stages 3–4 · dilation rate 1 · skip pattern 36
+**Discovered architecture**: 64×64×32 patches · LeakyReLU · stride-2 pooling in stages 3–4 · dilation rate 1 · selective skip pattern
 
 ---
 
 ## Architecture overview
 
 ```
-DWI MRI Volumes (.nii.gz / .nrrd)
+Prostate DWI MRI Volumes (.nii.gz / .nrrd)
          │
          ▼
   ┌─────────────────┐
@@ -44,7 +44,7 @@ DWI MRI Volumes (.nii.gz / .nrrd)
            │  31 preprocessed samples (preprocessed_dwi_data/)
            ▼
   ┌──────────────────────────────────────────────────────┐
-  │              RONASMIS Search Loop (150 episodes)     │
+  │                PRISM Search Loop (150 episodes)      │
   │                                                      │
   │  ┌──────────────┐   9 decisions   ┌───────────────┐  │
   │  │ LSTM         │ ──────────────► │ ChildNetwork  │  │
@@ -58,7 +58,7 @@ DWI MRI Volumes (.nii.gz / .nrrd)
   │                          └─────────────────────────┘ │
   └──────────────────────────────────────────────────────┘
            │
-           │  best_architecture.json + best_ronasmis_model.pt
+           │  best_architecture.json + best_prism_model.pt
            ▼
   ┌─────────────────┐
   │  Full Inference │  Export predictions as .nrrd for 3D Slicer
@@ -103,46 +103,42 @@ Loss: Dice loss on main output + 0.4 × Dice on deep supervision outputs
 ## File structure
 
 ```
-BioAi_v2/
-├── ronasmis.py                      # Core: all model classes and trainer
-│   ├── RONASMISConfig               # Hyperparameter configuration
+prism-prostate-dwi-segmentation/
+├── prism.py                         # Core: all model classes and trainer
+│   ├── PRISMConfig                  # Hyperparameter configuration
 │   ├── LSTMController               # RL controller (2-layer LSTM, REINFORCE)
 │   ├── ParameterSharingManager      # Shared weight bank with EMA updates
 │   ├── SearchSpace                  # Action space encoder / decoder
 │   ├── ChildNetwork                 # Dynamic 3D U-Net builder
 │   ├── EfficientSkipConnection      # Element-wise sum skip connections
 │   ├── DiceLoss                     # Dice loss for segmentation
-│   └── RONASMISTrainer              # Main search loop
+│   └── PRISMTrainer                 # Main search loop
 │
-├── train_ronasmis.py                # Training entry point (raw data)
-├── train_ronasmis_optimized.py      # Training entry point (preprocessed .pt)
+├── train_prism.py                   # Training entry point
 ├── preprocess_dwi_data.py           # DWI → normalized .pt files
-├── test_ronasmis_model.py           # Inference + .nrrd export
+├── test_prism.py                    # Inference + .nrrd export
+├── run_prism.py                     # Quick-start interactive CLI
 ├── search_space.py                  # Standalone search space utilities
+├── visualize_training_results.py    # Generate interactive HTML dashboards
+├── plot_training_metrics.py         # Generate static training plots
 │
-├── Extracted_DWI/                   # Raw DWI volumes (.nii.gz + .nrrd labels)
-├── preprocessed_dwi_data/           # 31 preprocessed .pt files + manifest
+├── prism_config.yaml                # YAML configuration
+├── requirements_prism.txt           # Python dependencies
 ├── dwi_dataset_pairs.json           # Image-label pair index
 │
-├── experiments/
-│   └── ronasmis_300ep/
-│       ├── best_ronasmis_model.pt   # Best found architecture + weights
-│       ├── best_architecture.json   # Architecture config
-│       └── training_history.json    # Reward / loss curves
+├── training_plots/                  # Static matplotlib PNGs
+│   ├── reward_progression.png
+│   ├── entropy_analysis.png
+│   ├── controller_losses.png
+│   └── training_dashboard.png
 │
-├── segmentation_results/            # Inference outputs
-│   ├── prediction_*_dice*.nrrd      # Predictions per patient
-│   └── groundtruth_*.nrrd           # Ground truth for comparison
-│
-├── training_plots/                  # Static matplotlib PNGs (4 plots)
 ├── visualization_results/           # Interactive HTML dashboards
 │   ├── dashboard.html
 │   ├── training_progress.html
 │   ├── convergence_analysis.html
 │   └── architecture_analysis.html
 │
-├── requirements_ronasmis.txt        # Python dependencies
-└── ronasmis_config.yaml             # YAML config (alternative to CLI args)
+└── RESULTS_SUMMARY.md               # Training results and performance summary
 ```
 
 ---
@@ -152,12 +148,14 @@ BioAi_v2/
 ### 1. Install dependencies
 
 ```bash
-pip install -r requirements_ronasmis.txt
+pip install -r requirements_prism.txt
 ```
 
 Key dependencies: `torch`, `nibabel`, `pynrrd`, `numpy`, `wandb`, `tqdm`, `matplotlib`
 
 ### 2. Preprocess data
+
+Place your prostate DWI MRI volumes (`.nii.gz` images + `.nrrd` segmentation labels) in `Extracted_DWI/`, then:
 
 ```bash
 python preprocess_dwi_data.py
@@ -168,13 +166,14 @@ Reads image-label pairs from `dwi_dataset_pairs.json`, applies Z-score normaliza
 ### 3. Run architecture search
 
 ```bash
-# Full search (150 episodes)
-python train_ronasmis_optimized.py \
-    --episodes 150 \
-    --batch_size 2
+# Full search (150 episodes, ~33 hours on RTX 5090)
+python train_prism.py --episodes 150 --batch_size 2
 
-# Quick test run (5 episodes)
-python train_ronasmis_optimized.py --quick_test
+# Quick test (5 episodes)
+python train_prism.py --quick_test
+
+# Interactive launcher
+python run_prism.py
 ```
 
 Results are saved under `experiments/<exp_name>/`.
@@ -182,25 +181,25 @@ Results are saved under `experiments/<exp_name>/`.
 ### 4. Evaluate best architecture
 
 ```bash
-python test_ronasmis_model.py \
-    --model_path experiments/ronasmis_300ep/best_ronasmis_model.pt \
+python test_prism.py \
+    --model_path experiments/prism_search/best_prism_model.pt \
     --preprocessed_dir preprocessed_dwi_data \
     --output_dir segmentation_results
 ```
 
-Opens both `prediction_*.nrrd` and `groundtruth_*.nrrd` in 3D Slicer for visual comparison.
+Opens both `prediction_*.nrrd` and `groundtruth_*.nrrd` in 3D Slicer for side-by-side comparison.
 
 ### 5. Custom search configuration
 
 ```python
-from ronasmis import RONASMISConfig, RONASMISTrainer
+from prism import PRISMConfig, PRISMTrainer
 
-config = RONASMISConfig()
+config = PRISMConfig()
 config.episodes = 100
 config.child_networks_per_episode = 15
 config.child_lr = 0.0005
 
-trainer = RONASMISTrainer(config, device)
+trainer = PRISMTrainer(config, device)
 results = trainer.search(train_loader, val_loader)
 ```
 
@@ -222,12 +221,13 @@ Training and reward curves are logged via Weights & Biases (`wandb`) and exporte
 
 ## Dataset
 
-- **Modality**: Diffusion-Weighted Imaging (DWI) brain MRI
+- **Modality**: Diffusion-Weighted Imaging (DWI) MRI
+- **Task**: Prostate cancer lesion segmentation
 - **Volumes**: 31 patients
 - **Format**: Mixed `.nii.gz` (images) and `.nrrd` (segmentation labels)
 - **Dimensions**: Variable — 168×100×20 to 224×224×35 (highly anisotropic)
 - **Split**: 80% training (25 volumes), 20% validation (6 volumes)
-- **Labels**: Binary — stroke lesion vs background
+- **Labels**: Binary — prostate cancer lesion vs background
 
 ---
 

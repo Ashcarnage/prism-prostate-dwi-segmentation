@@ -7,7 +7,7 @@ import math
 class PatchSizeCalculator:
     """
     Calculates optimal patch sizes for anisotropic 3D medical images
-    based on the RONASMIS search space formulation.
+    based on the PRISM search space formulation.
     """
     
     def __init__(self, stride_parameter: int = 2):
@@ -17,7 +17,7 @@ class PatchSizeCalculator:
                             image_dimensions: Tuple[int, int, int, int],
                             search_factors: List[int] = [0, 1, 2, 3, 4]) -> Dict:
         """
-        Calculate patch sizes using RONASMIS formulation:
+        Calculate patch sizes using PRISM formulation:
         Patch Size H/W = max(H, W) / S^4 - S^4 * {0, 1, 2, 3, 4}
         Patch Size Depth = D / S^4 - S^4 * {0, 1, 2, 3, 4}
         """
@@ -113,7 +113,7 @@ class SearchSpaceEncoder:
 class EfficientSkipConnection(nn.Module):
     """
     Implements memory-efficient skip connections using element-wise sum
-    instead of concatenation, as specified in RONASMIS.
+    instead of concatenation, as specified in PRISM.
     """
     
     def __init__(self, 
@@ -164,7 +164,7 @@ class EfficientSkipConnection(nn.Module):
 
 class MacroSearchSpace:
     """
-    Implements the complete macro search space for RONASMIS.
+    Implements the complete macro search space for PRISM.
     """
     
     def __init__(self, config: Dict):

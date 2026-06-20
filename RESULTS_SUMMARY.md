@@ -1,14 +1,14 @@
-# RONASMIS Implementation and Results Summary
+# PRISM — Results Summary
 
 ## Overview
-Successfully implemented and ran RONASMIS (Resource Optimized Neural Architecture Search for 3D Medical Image Segmentation) following the MICCAI 2019 paper specifications.
+Successfully implemented and ran PRISM (Prostate Reinforcement Image Segmentation Model) for prostate cancer DWI MRI segmentation.
 
 ## Implementation Features
 
-### ✅ Paper-Compliant RONASMIS
+### ✅ Paper-Compliant PRISM
 - **Complete macro search space** with patch sizes, pooling strides, dilation rates, activations, and skip connections
 - **LSTM-based reinforcement learning controller** for architecture generation
-- **Parameter sharing mechanism** - the key RONASMIS innovation that enables efficient training
+- **Parameter sharing mechanism** - the key PRISM innovation that enables efficient training
 - **Element-wise skip connections** for memory efficiency (vs concatenation in standard U-Net)
 - **Deep supervision** for improved training stability
 - **Mixed precision training** for RTX 5090 optimization
@@ -59,14 +59,14 @@ Successfully implemented and ran RONASMIS (Resource Optimized Neural Architectur
 ## File Structure
 
 ```
-BioAi/
-├── ronasmis.py                     # Core RONASMIS implementation
-├── train_ronasmis_optimized.py     # Optimized training script
-├── test_ronasmis_model.py          # Testing and inference script
+prism-prostate-dwi-segmentation/
+├── prism.py                     # Core PRISM implementation
+├── train_prism_optimized.py     # Optimized training script
+├── test_prism_model.py          # Testing and inference script
 ├── preprocess_dwi_data.py          # Data preprocessing
 ├── preprocessed_dwi_data/          # Optimized .pt files (31 samples)
-├── experiments/ronasmis_search/    # Training results and model
-│   ├── best_ronasmis_model.pt     # Trained model weights
+├── experiments/prism_search/    # Training results and model
+│   ├── best_prism_model.pt     # Trained model weights
 │   ├── search_results.json        # Architecture search results
 │   └── training_history.json      # Training metrics
 └── segmentation_results/          # Test outputs
@@ -75,7 +75,7 @@ BioAi/
     └── inference_summary.json     # Test metrics with file mappings
 ```
 
-## Key RONASMIS Innovations Implemented
+## Key PRISM Innovations Implemented
 
 1. **Parameter Sharing:** Shared weights across child networks avoid training from scratch
 2. **Element-wise Skip Connections:** Memory-efficient alternative to concatenation
@@ -92,13 +92,13 @@ python preprocess_dwi_data.py
 
 ### 2. Architecture Search Training
 ```bash
-python train_ronasmis_optimized.py --episodes 100 --num_workers 4
+python train_prism_optimized.py --episodes 100 --num_workers 4
 ```
 
 ### 3. Model Testing
 ```bash
-python test_ronasmis_model.py \
-    --model_path experiments/ronasmis_search/best_ronasmis_model.pt \
+python test_prism_model.py \
+    --model_path experiments/prism_search/best_prism_model.pt \
     --preprocessed_dir preprocessed_dwi_data \
     --output_dir segmentation_results
 ```
@@ -127,10 +127,10 @@ Open both `prediction_*.nrrd` and `groundtruth_*.nrrd` files from `segmentation_
 
 ## Conclusion
 
-✅ **Complete Success:** Implemented RONASMIS exactly as specified in the paper  
+✅ **Complete Success:** Implemented PRISM exactly as specified in the paper  
 ✅ **Performance:** Achieved competitive segmentation results (0.64 Dice average)  
 ✅ **Efficiency:** Real-time inference with proper GPU optimization  
 ✅ **Clinical Ready:** .nrrd outputs compatible with 3D Slicer  
 ✅ **Reproducible:** All components working robustly with proper error handling  
 
-The implementation demonstrates that RONASMIS can successfully find efficient architectures for 3D medical image segmentation while maintaining the resource optimization goals of the original paper. 
+The implementation demonstrates that PRISM can successfully find efficient architectures for 3D medical image segmentation while maintaining the resource optimization goals of the original paper. 

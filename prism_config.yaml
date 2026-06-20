@@ -1,4 +1,4 @@
-# RONASMIS Configuration for RTX 5090 and DWI Data
+# PRISM Configuration for RTX 5090 and DWI Data
 dataset:
   name: "DWI_Segmentation"
   data_path: "./Extracted_DWI/"
@@ -60,7 +60,7 @@ preprocessing:
 # Logging and monitoring
 logging:
   use_wandb: true
-  project_name: "RONASMIS_DWI"
+  project_name: "PRISM_DWI"
   log_frequency: 10
   save_checkpoints: true
   checkpoint_frequency: 50 

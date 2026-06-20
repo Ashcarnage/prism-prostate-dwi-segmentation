@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-RONASMIS Training Results Visualization
+PRISM Training Results Visualization
 Creates modern, interactive visualizations of the neural architecture search training process
 """
 
@@ -14,8 +14,8 @@ from pathlib import Path
 import argparse
 from datetime import datetime
 
-class RONASMISVisualizer:
-    """Modern visualization tool for RONASMIS training results"""
+class PRISMVisualizer:
+    """Modern visualization tool for PRISM training results"""
     
     def __init__(self, experiments_dir: str = "experiments"):
         self.experiments_dir = Path(experiments_dir)
@@ -28,7 +28,7 @@ class RONASMISVisualizer:
             'text': '#2C3E50'
         }
         
-    def load_training_data(self, experiment_name: str = "ronasmis_search"):
+    def load_training_data(self, experiment_name: str = "prism_search"):
         """Load training data from experiment directory"""
         exp_path = self.experiments_dir / experiment_name
         
@@ -161,7 +161,7 @@ class RONASMISVisualizer:
         # Update layout
         fig.update_layout(
             title={
-                'text': '🧠 RONASMIS Neural Architecture Search - Training Progress',
+                'text': '🧠 PRISM Neural Architecture Search - Training Progress',
                 'x': 0.5,
                 'font': {'size': 24, 'color': self.colors['text']}
             },
@@ -442,9 +442,9 @@ class RONASMISVisualizer:
         
         return fig
     
-    def generate_report(self, experiment_name: str = "ronasmis_search", output_dir: str = "visualization_results"):
+    def generate_report(self, experiment_name: str = "prism_search", output_dir: str = "visualization_results"):
         """Generate complete visualization report"""
-        print("🎨 Generating RONASMIS Training Visualizations...")
+        print("🎨 Generating PRISM Training Visualizations...")
         
         # Load data
         history, search_results = self.load_training_data(experiment_name)
@@ -488,7 +488,7 @@ class RONASMISVisualizer:
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RONASMIS Training Dashboard</title>
+    <title>PRISM Training Dashboard</title>
     <style>
         body {{
             font-family: 'Arial', sans-serif;
@@ -595,7 +595,7 @@ class RONASMISVisualizer:
 <body>
     <div class="container">
         <div class="header">
-            <h1>🧠 RONASMIS Neural Architecture Search</h1>
+            <h1>🧠 PRISM Neural Architecture Search</h1>
             <p>Training Results Dashboard - {datetime.now().strftime("%Y-%m-%d %H:%M")}</p>
         </div>
         
@@ -651,7 +651,7 @@ class RONASMISVisualizer:
         </div>
         
         <div style="text-align: center; margin-top: 40px; padding: 20px; background: #f8f9fa; border-radius: 10px;">
-            <h3>🎉 RONASMIS Training Completed Successfully!</h3>
+            <h3>🎉 PRISM Training Completed Successfully!</h3>
             <p>The neural architecture search has identified an optimal architecture with a Dice score of <strong>{best_score:.4f}</strong></p>
             <p>Ready for deployment and clinical evaluation! 🏥</p>
         </div>
@@ -664,13 +664,13 @@ class RONASMISVisualizer:
             f.write(html_content)
 
 def main():
-    parser = argparse.ArgumentParser(description='Visualize RONASMIS training results')
-    parser.add_argument('--experiment', default='ronasmis_search', help='Experiment name')
+    parser = argparse.ArgumentParser(description='Visualize PRISM training results')
+    parser.add_argument('--experiment', default='prism_search', help='Experiment name')
     parser.add_argument('--output', default='visualization_results', help='Output directory')
     
     args = parser.parse_args()
     
-    visualizer = RONASMISVisualizer()
+    visualizer = PRISMVisualizer()
     output_path = visualizer.generate_report(args.experiment, args.output)
     
     print(f"\n🎨 Visualization complete!")

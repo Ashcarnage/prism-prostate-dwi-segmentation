@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-DWI Data Preprocessing for RONASMIS
+DWI Data Preprocessing for PRISM
 Converts DWI dataset to optimized .pt files while preserving original dimensions
 """
 
@@ -17,7 +17,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 class DWIPreprocessor:
-    """Preprocessor for DWI data following RONASMIS paper specifications"""
+    """Preprocessor for DWI data following PRISM specifications"""
     
     def __init__(self, data_dir: str, output_dir: str = "preprocessed_dwi_data"):
         self.data_dir = Path(data_dir)
@@ -25,7 +25,7 @@ class DWIPreprocessor:
         self.output_dir.mkdir(exist_ok=True)
         
     def load_and_normalize_image(self, path: str) -> np.ndarray:
-        """Load and normalize medical image following RONASMIS protocol"""
+        """Load and normalize medical image following PRISM protocol"""
         if path.endswith('.nrrd'):
             data, _ = nrrd.read(path)
         else:
@@ -39,14 +39,14 @@ class DWIPreprocessor:
         if len(data.shape) == 4:
             data = data[..., 0]
         
-        # Z-score normalization for images (as per RONASMIS)
+        # Z-score normalization for images (as per PRISM)
         if data.std() > 0:
             data = (data - data.mean()) / data.std()
         
         return data
     
     def load_and_process_label(self, path: str) -> np.ndarray:
-        """Load and process label following RONASMIS protocol"""
+        """Load and process label following PRISM protocol"""
         if path.endswith('.nrrd'):
             data, _ = nrrd.read(path)
         else:
@@ -156,7 +156,7 @@ def main():
     
     if processed_files:
         print(f"🎉 Successfully preprocessed {len(processed_files)} DWI samples!")
-        print("Ready for RONASMIS training!")
+        print("Ready for PRISM training!")
     else:
         print("❌ No files were successfully processed!")
 

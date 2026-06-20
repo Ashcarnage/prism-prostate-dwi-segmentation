@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Quick Start Script for RONASMIS
-Simplified interface with sensible defaults for fast experimentation
+PRISM Quick Start Script
+Simplified interface with sensible defaults
 """
 
 import os
@@ -12,7 +12,7 @@ from termcolor import colored
 def check_gpu():
     """Check GPU availability and memory"""
     if not torch.cuda.is_available():
-        print(colored("❌ CUDA not available. RONASMIS requires GPU for efficient training.", "red"))
+        print(colored("❌ CUDA not available. PRISM requires GPU for efficient training.", "red"))
         return False
     
     device_name = torch.cuda.get_device_name()
@@ -45,16 +45,16 @@ def check_dataset():
 
 def run_quick_search():
     """Run a quick architecture search with minimal parameters"""
-    print(colored("\n🚀 Starting Quick RONASMIS Search", "magenta"))
+    print(colored("\n🚀 Starting Quick PRISM Search", "magenta"))
     print(colored("   Episodes: 25, Networks per episode: 8", "cyan"))
     
     cmd = [
-        "python", "train_ronasmis.py",
+        "python", "train_prism.py",
         "--total_episodes", "25",
         "--child_networks_per_episode", "8",
         "--child_epochs_per_episode", "2",
         "--batch_size", "2",
-        "--output_dir", "ronasmis_quick",
+        "--output_dir", "prism_quick",
         "--experiment_name", "quick_search"
     ]
     
@@ -67,18 +67,18 @@ def run_quick_search():
 
 def run_full_search():
     """Run a full architecture search with optimal parameters"""
-    print(colored("\n🎯 Starting Full RONASMIS Search", "magenta"))
+    print(colored("\n🎯 Starting Full PRISM Search", "magenta"))
     print(colored("   Episodes: 75, Networks per episode: 12", "cyan"))
     print(colored("   This will take approximately 12-18 hours on RTX 5090", "cyan"))
     
     cmd = [
-        "python", "train_ronasmis.py",
+        "python", "train_prism.py",
         "--total_episodes", "75",
         "--child_networks_per_episode", "12",
         "--child_epochs_per_episode", "3",
         "--batch_size", "2",
         "--use_wandb",
-        "--output_dir", "ronasmis_full",
+        "--output_dir", "prism_full",
         "--experiment_name", "full_search"
     ]
     
@@ -90,14 +90,14 @@ def run_full_search():
         print(colored(f"❌ Error during search: {e}", "red"))
 
 def test_components():
-    """Test RONASMIS components"""
-    print(colored("\n🔧 Testing RONASMIS Components", "blue"))
+    """Test PRISM components"""
+    print(colored("\n🔧 Testing PRISM Components", "blue"))
     
     try:
-        from ronasmis import RONASMISConfig, SearchSpace, LSTMController, ChildNetwork
+        from prism import PRISMConfig, SearchSpace, LSTMController, ChildNetwork
         
         # Test configuration
-        config = RONASMISConfig()
+        config = PRISMConfig()
         print(colored("✅ Configuration loaded", "green"))
         
         # Test search space
@@ -131,8 +131,8 @@ def test_components():
 def main():
     """Main interface"""
     print(colored("=" * 60, "magenta"))
-    print(colored("RONASMIS Quick Start", "magenta"))
-    print(colored("Resource Optimized NAS for 3D Medical Segmentation", "magenta"))
+    print(colored("PRISM Quick Start", "magenta"))
+    print(colored("RL-based NAS for Prostate DWI Segmentation", "magenta"))
     print(colored("=" * 60, "magenta"))
     
     # Check system requirements

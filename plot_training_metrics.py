@@ -47,7 +47,7 @@ def create_reward_plot(rewards, save_path):
     # Styling
     ax.set_xlabel('Episode', fontsize=14, fontweight='bold')
     ax.set_ylabel('Reward', fontsize=14, fontweight='bold')
-    ax.set_title('RONASMIS Training: Reward Progression Analysis', fontsize=18, fontweight='bold', pad=20)
+    ax.set_title('PRISM Training: Reward Progression Analysis', fontsize=18, fontweight='bold', pad=20)
     
     ax.grid(True, alpha=0.3, linestyle='--')
     ax.legend(loc='lower right', fontsize=12, framealpha=0.9)
@@ -249,14 +249,14 @@ def create_comprehensive_dashboard(data, save_path):
     cbar = plt.colorbar(im, ax=ax5, shrink=0.6)
     cbar.set_label('Correlation Coefficient', rotation=270, labelpad=15)
     
-    fig.suptitle('RONASMIS Training Dashboard - Complete Analysis', fontsize=24, fontweight='bold', y=0.98)
+    fig.suptitle('PRISM Training Dashboard - Complete Analysis', fontsize=24, fontweight='bold', y=0.98)
     
     plt.savefig(save_path, dpi=300, bbox_inches='tight', facecolor='white')
     plt.close()
 
 def main():
     # Load data
-    data = load_training_data('/Users/ayushbhakat/Desktop/BioAi_v2/experiments/ronasmis_300ep/training_history.json')
+    data = load_training_data('/Users/ayushbhakat/Desktop/BioAi_v2/experiments/prism_300ep/training_history.json')
     
     # Create output directory
     import os

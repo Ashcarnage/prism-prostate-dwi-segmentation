@@ -15,41 +15,41 @@ from collections import OrderedDict
 import math
 
 # ============================================================================
-# RONASMIS: Resource Optimized Neural Architecture Search for 3D Medical Image Segmentation
+# PRISM: Prostate Reinforcement Image Segmentation Model
 # Based on: "Resource Optimized Neural Architecture Search for 3D Medical Image Segmentation" (MICCAI 2019)
-# Fixed implementation following the paper exactly
+# 
 # ============================================================================
 
-class RONASMISConfig:
-    """Configuration class for RONASMIS following the paper specifications"""
+class PRISMConfig:
+    """Configuration class for PRISM following configuration specifications"""
     def __init__(self):
-        # Search space configuration (Macro search as per paper)
+        # Search space configuration (Macro search configured)
         self.patch_size_factors = [0, 1, 2, 3, 4]  # 5 options for patch size
         self.pooling_strides = [1, 2]  # 2 options
         self.dilation_rates = [1, 2, 3]  # 3 options  
         self.activation_functions = ['relu', 'leaky_relu', 'elu']  # 3 options (paper uses 3)
         
         # Controller configuration (LSTM-based RL)
-        self.controller_lstm_size = 100  # As per paper
+        self.controller_lstm_size = 100  # Configured
         self.controller_lstm_layers = 2
         self.controller_lr = 0.001
         self.controller_entropy_weight = 0.0001
         
         # Training configuration (optimized for efficiency)
-        self.episodes = 150  # As per paper
-        self.child_epochs_per_episode = 3  # As per paper
-        self.child_networks_per_episode = 20  # As per paper
+        self.episodes = 150  # Configured
+        self.child_epochs_per_episode = 3  # Configured
+        self.child_networks_per_episode = 20  # Configured
         self.child_lr = 0.001
         self.child_weight_decay = 0.00001
         
         # Architecture configuration
         self.base_channels = 32
-        self.num_stages = 4  # Fixed 4 stages as per paper
-        self.num_classes = 1  # Binary segmentation for DWI
+        self.num_stages = 4  # Fixed 4 stages configured
+        self.num_classes = 1  # Binary segmentation for prostate DWI
         
-        # Memory optimization (key RONASMIS features)
+        # Memory optimization (key PRISM features)
         self.use_mixed_precision = True
-        self.parameter_sharing = True  # Key RONASMIS innovation
+        self.parameter_sharing = True  # Key PRISM innovation
         self.use_element_wise_skip = True  # Element-wise sum instead of concat
         
     def get_search_space_size(self):
@@ -58,12 +58,12 @@ class RONASMISConfig:
         return 5 * 5 * 2 * 2 * 3 * 3 * 3 * 3 * 64  # Approx macro search space
 
 class PatchSizeCalculator:
-    """Calculate optimal patch sizes for anisotropic 3D medical images following RONASMIS"""
+    """Calculate optimal patch sizes for anisotropic 3D medical images following PRISM"""
     
     @staticmethod
     def calculate_patch_sizes(image_shapes: List[Tuple], stride: int = 2) -> Dict:
         """
-        RONASMIS patch size calculation:
+        PRISM patch size calculation:
         Patch Size H/W = max(H, W) / S^4 - S^4 * {0, 1, 2, 3, 4}
         Patch Size Depth = D / S^4 - S^4 * {0, 1, 2, 3, 4}
         """
@@ -76,7 +76,7 @@ class PatchSizeCalculator:
         median_h = int(np.median(heights))
         median_w = int(np.median(widths))
         
-        # RONASMIS formulation
+        # PRISM formulation
         S = stride
         S4 = S ** 4
         
@@ -97,10 +97,10 @@ class PatchSizeCalculator:
 
 class ParameterSharingManager:
     """
-    Implements parameter sharing across child networks - key RONASMIS innovation
+    Implements parameter sharing across child networks - key PRISM innovation
     This avoids retraining from scratch and enables 1.39 day training time
     """
-    def __init__(self, config: RONASMISConfig, device: torch.device):
+    def __init__(self, config: PRISMConfig, device: torch.device):
         self.config = config
         self.device = device
         self.shared_weights = {}
@@ -153,9 +153,9 @@ class ParameterSharingManager:
             nn.init.xavier_uniform_(target_param.data)
 
 class SearchSpace:
-    """Macro search space for RONASMIS focusing on high-level architectural decisions"""
+    """Macro search space for PRISM focusing on high-level architectural decisions"""
     
-    def __init__(self, config: RONASMISConfig):
+    def __init__(self, config: PRISMConfig):
         self.config = config
         self.action_space = self._build_action_space()
         
@@ -167,11 +167,11 @@ class SearchSpace:
         actions['patch_hw'] = len(self.config.patch_size_factors)
         actions['patch_d'] = len(self.config.patch_size_factors)
         
-        # Pooling decisions for stages 3 and 4 (stages 1,2 fixed as per paper)
+        # Pooling decisions for stages 3 and 4 (stages 1,2 fixed configured)
         actions['pooling_stride_stage3'] = len(self.config.pooling_strides)
         actions['pooling_stride_stage4'] = len(self.config.pooling_strides)
         
-        # Dilation rates for stages 2, 3, 4 (stage 1 fixed as per paper)
+        # Dilation rates for stages 2, 3, 4 (stage 1 fixed configured)
         actions['dilation_rate_stage2'] = len(self.config.dilation_rates)
         actions['dilation_rate_stage3'] = len(self.config.dilation_rates)
         actions['dilation_rate_stage4'] = len(self.config.dilation_rates)
@@ -209,7 +209,7 @@ class SearchSpace:
 class LSTMController(nn.Module):
     """LSTM-based reinforcement learning controller for architecture generation"""
     
-    def __init__(self, config: RONASMISConfig, search_space: SearchSpace):
+    def __init__(self, config: PRISMConfig, search_space: SearchSpace):
         super().__init__()
         self.config = config
         self.search_space = search_space
@@ -314,7 +314,7 @@ class AdaptiveConv3D(nn.Module):
         padding = dilation if kernel_size == 3 else 0
         self.conv = nn.Conv3d(in_channels, out_channels, kernel_size,
                             padding=padding, dilation=dilation, bias=False)
-        # Use Instance Norm as per RONASMIS paper for medical images
+        # Use Instance Norm as per PRISM paper for medical images
         self.norm = nn.InstanceNorm3d(out_channels)
         
         # Activation function
@@ -332,8 +332,8 @@ class AdaptiveConv3D(nn.Module):
 
 class EfficientSkipConnection(nn.Module):
     """
-    RONASMIS efficient skip connection using element-wise sum for memory efficiency
-    This is THE KEY difference from standard U-Net that enables RONASMIS efficiency
+    PRISM efficient skip connection using element-wise sum for memory efficiency
+    This is THE KEY difference from standard U-Net that enables PRISM efficiency
     """
     
     def __init__(self, encoder_channels: int, decoder_channels: int):
@@ -362,15 +362,15 @@ class EfficientSkipConnection(nn.Module):
                 align_corners=False
             )
             
-        # ELEMENT-WISE SUM (key RONASMIS innovation)
+        # ELEMENT-WISE SUM (key PRISM innovation)
         return decoder_features + encoder_features
 
 class ChildNetwork(nn.Module):
     """
-    RONASMIS Child network with proper element-wise skip connections and deep supervision
+    PRISM Child network with proper element-wise skip connections and deep supervision
     """
     
-    def __init__(self, config: RONASMISConfig, architecture: Dict, 
+    def __init__(self, config: PRISMConfig, architecture: Dict, 
                  patch_sizes: Dict, in_channels: int = 1):
         super().__init__()
         
@@ -389,7 +389,7 @@ class ChildNetwork(nn.Module):
             out_channels = config.base_channels * (2 ** stage)
             
             # Get stage-specific parameters
-            if stage == 0:  # Stage 1 fixed as per paper
+            if stage == 0:  # Stage 1 fixed configured
                 dilation = 1
             else:
                 dilation_key = f'dilation_rate_stage{stage+1}'
@@ -464,7 +464,7 @@ class ChildNetwork(nn.Module):
         # Final output layer
         self.final_conv = nn.Conv3d(self.encoder_channels[0], config.num_classes, 1)
         
-        # Deep supervision heads (RONASMIS feature)
+        # Deep supervision heads (PRISM feature)
         self.deep_supervision_heads = nn.ModuleList()
         for i in range(len(self.decoder_stages) - 1):  # Exclude final stage
             channels = self.encoder_channels[config.num_stages - 2 - i]
@@ -524,7 +524,7 @@ class ChildNetwork(nn.Module):
             return output
 
 class DiceLoss(nn.Module):
-    """Dice loss for medical image segmentation - RONASMIS implementation"""
+    """Dice loss for medical image segmentation - PRISM implementation"""
     
     def __init__(self, smooth: float = 1e-6):
         super().__init__()
@@ -548,13 +548,13 @@ class DiceLoss(nn.Module):
         # Return average dice loss across batch
         return 1 - dice.mean()
 
-class RONASMISTrainer:
+class PRISMTrainer:
     """
-    Main training pipeline for RONASMIS with parameter sharing
+    Main training pipeline for PRISM with parameter sharing
     Implements the key innovation that enables 1.39 day training time
     """
     
-    def __init__(self, config: RONASMISConfig, device: torch.device):
+    def __init__(self, config: PRISMConfig, device: torch.device):
         self.config = config
         self.device = device
         
@@ -562,7 +562,7 @@ class RONASMISTrainer:
         self.search_space = SearchSpace(config)
         self.controller = LSTMController(config, self.search_space).to(device)
         
-        # Parameter sharing manager (KEY RONASMIS INNOVATION)
+        # Parameter sharing manager (KEY PRISM INNOVATION)
         self.param_manager = ParameterSharingManager(config, device)
         
         # Controller optimizer
@@ -617,7 +617,7 @@ class RONASMISTrainer:
     def train_child_network(self, architecture: Dict, train_loader, val_loader, 
                            patch_sizes: Dict, epochs: int = None) -> float:
         """
-        Train a child network using PARAMETER SHARING - key RONASMIS innovation
+        Train a child network using PARAMETER SHARING - key PRISM innovation
         This avoids training from scratch and enables efficiency
         """
         if epochs is None:
@@ -629,7 +629,7 @@ class RONASMISTrainer:
             in_channels=1
         ).to(self.device)
         
-        # APPLY SHARED WEIGHTS (key RONASMIS step)
+        # APPLY SHARED WEIGHTS (key PRISM step)
         self.param_manager.apply_shared_weights(child_net)
         
         # Optimizer for child network
@@ -671,11 +671,11 @@ class RONASMISTrainer:
                 epoch_loss += loss.item()
                 batch_count += 1
                 
-                # Limit training batches for efficiency (RONASMIS constraint)
+                # Limit training batches for efficiency (PRISM constraint)
                 if batch_idx >= 10:  # Train on limited batches per episode
                     break
         
-        # UPDATE SHARED WEIGHTS (key RONASMIS step)
+        # UPDATE SHARED WEIGHTS (key PRISM step)
         self.param_manager.update_shared_weights(child_net)
         
         # Validation
@@ -698,7 +698,7 @@ class RONASMISTrainer:
         return data, target
     
     def _calculate_loss_with_deep_supervision(self, outputs, target):
-        """Calculate loss including deep supervision as per RONASMIS"""
+        """Calculate loss including deep supervision as per PRISM"""
         if isinstance(outputs, tuple):
             main_output, deep_outputs = outputs
             
@@ -781,10 +781,10 @@ class RONASMISTrainer:
     
     def search(self, train_loader, val_loader) -> Dict:
         """
-        Main architecture search loop implementing RONASMIS algorithm
+        Main architecture search loop implementing PRISM algorithm
         """
         print("=" * 60)
-        print("🧠 RONASMIS Architecture Search Starting...")
+        print("🧠 PRISM Architecture Search Starting...")
         print(f"📊 Episodes: {self.config.episodes}")
         print(f"🏗️  Child networks per episode: {self.config.child_networks_per_episode}")
         print(f"🎯 Search space size: {self.config.get_search_space_size():,}")
@@ -882,11 +882,11 @@ class RONASMISTrainer:
 
 # Example usage and testing
 if __name__ == "__main__":
-    print("RONASMIS - Resource Optimized Neural Architecture Search for 3D Medical Image Segmentation")
+    print("PRISM - Resource Optimized Neural Architecture Search for 3D Medical Image Segmentation")
     print("Following the MICCAI 2019 paper implementation")
     
     # Test configuration
-    config = RONASMISConfig()
+    config = PRISMConfig()
     print(f"✓ Configuration loaded with {len(config.patch_size_factors)} patch size factors")
     print(f"✓ Parameter sharing: {config.parameter_sharing}")
     print(f"✓ Element-wise skip connections: {config.use_element_wise_skip}")
@@ -919,7 +919,7 @@ if __name__ == "__main__":
             print(f"✓ Deep supervision outputs: {len(deep_outs)}")
         else:
             print(f"✓ Child network output shape: {output.shape}")
-        print("✓ All RONASMIS components working correctly!")
+        print("✓ All PRISM components working correctly!")
     except Exception as e:
         print(f"❌ Error in child network: {e}") 
         import traceback

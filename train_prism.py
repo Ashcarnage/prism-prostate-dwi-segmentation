@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Optimized RONASMIS Training Script
-Following the MICCAI 2019 paper exactly with proper optimizations
+Optimized PRISM Training Script
+Following the  exactly with proper optimizations
 """
 
 import os
@@ -23,10 +23,10 @@ from tqdm import tqdm
 # Suppress warnings for cleaner output
 warnings.filterwarnings('ignore')
 
-# Import our RONASMIS implementation
-from ronasmis import (
-    RONASMISConfig, 
-    RONASMISTrainer, 
+# Import our PRISM implementation
+from prism import (
+    PRISMConfig, 
+    PRISMTrainer, 
     ChildNetwork,
     DiceLoss,
     PatchSizeCalculator
@@ -65,7 +65,7 @@ def setup_gpu_optimization():
 
 class PreprocessedDWIDataset(Dataset):
     """
-    Dataset for preprocessed DWI .pt files following RONASMIS specifications
+    Dataset for preprocessed DWI .pt files following PRISM specifications
     """
     
     def __init__(self, preprocessed_dir: str, manifest_file: str = "preprocessing_manifest.json"):
@@ -104,16 +104,16 @@ class PreprocessedDWIDataset(Dataset):
             dummy_label = torch.zeros(1, 32, 64, 64)
             return dummy_img, dummy_label
 
-class OptimizedRONASMISConfig(RONASMISConfig):
-    """Optimized RONASMIS config following the paper with GPU optimizations"""
+class OptimizedPRISMConfig(PRISMConfig):
+    """Optimized PRISM config  with GPU optimizations"""
     
     def __init__(self):
         super().__init__()
         
         # Paper-specified settings
-        self.episodes = 300  # Reduce for testing, paper uses 150
-        self.child_networks_per_episode = 20  # As per paper
-        self.child_epochs_per_episode = 3  # As per paper
+        self.episodes = 300  # Reduce for testing, design uses 150
+        self.child_networks_per_episode = 20  # As per design
+        self.child_epochs_per_episode = 3  # As per design
         
         # GPU optimizations
         self.use_mixed_precision = True
@@ -121,17 +121,17 @@ class OptimizedRONASMISConfig(RONASMISConfig):
         self.gradient_accumulation_steps = 2
         
         # Child network training
-        self.child_learning_rate = 0.001  # As per paper
+        self.child_learning_rate = 0.001  # As per design
         self.max_batches_per_child = 15  # Limit for efficiency
         
-        # Patch sizes for anisotropic 3D medical images (as per paper)
+        # Patch sizes for anisotropic 3D medical images (as per design)
         self.patch_sizes = {
             'hw_sizes': [32, 48, 64, 80, 96],  # Square patches
             'd_sizes': [16, 20, 24, 28, 32],   # Depth dimension
             'base_channels': 32
         }
         
-        print("🚀 Using Optimized RONASMIS Config")
+        print("🚀 Using Optimized PRISM Config")
         print(f"   Episodes: {self.episodes}")
         print(f"   Child networks per episode: {self.child_networks_per_episode}")
         print(f"   Batch size: {self.batch_size}")
@@ -140,7 +140,7 @@ class OptimizedRONASMISConfig(RONASMISConfig):
 def smart_collate_fn(batch):
     """
     Smart collate function that handles variable-sized 3D volumes efficiently
-    Following RONASMIS paper: adapt input to match architecture's patch size
+    Following PRISM design: adapt input to match architecture's patch size
     """
     # Filter out None entries
     batch = [b for b in batch if b[0] is not None and b[1] is not None]
@@ -149,7 +149,7 @@ def smart_collate_fn(batch):
     
     images, labels = zip(*batch)
     
-    # For RONASMIS, we don't pad to max size (memory intensive)
+    # For PRISM, we don't pad to max size (memory intensive)
     # Instead, we'll resize to a consistent size that the architecture can handle
     target_size = (32, 64, 64)  # [D, H, W] - reasonable for most architectures
     
@@ -169,12 +169,12 @@ def smart_collate_fn(batch):
     
     return torch.stack(processed_images), torch.stack(processed_labels)
 
-class OptimizedRONASMISTrainer(RONASMISTrainer):
+class OptimizedPRISMTrainer(PRISMTrainer):
     """
-    Optimized RONASMIS trainer following the paper with proper weight saving
+    Optimized PRISM trainer  with proper weight saving
     """
     
-    def __init__(self, config: OptimizedRONASMISConfig, device=None):
+    def __init__(self, config: OptimizedPRISMConfig, device=None):
         if device is None:
             device = setup_gpu_optimization()
         
@@ -193,20 +193,20 @@ class OptimizedRONASMISTrainer(RONASMISTrainer):
     def train_child_network(self, architecture: Dict, train_loader, val_loader, 
                            patch_sizes: Dict, epochs: int = None) -> float:
         """
-        Train child network following RONASMIS paper exactly
+        Train child network following PRISM design exactly
         """
         if epochs is None:
             epochs = self.config.child_epochs_per_episode
         
-        # Create child network following paper specifications
+        # Create child network following PRISM specifications
         child_net = ChildNetwork(
             self.config, architecture, patch_sizes, in_channels=1
         ).to(self.device)
         
-        # Apply parameter sharing (key RONASMIS innovation)
+        # Apply parameter sharing (key PRISM innovation)
         self.param_manager.apply_shared_weights(child_net)
         
-        # Optimizer (AdamW as per paper)
+        # Optimizer (AdamW as per design)
         optimizer = torch.optim.Adam(
             child_net.parameters(),
             lr=self.config.child_learning_rate,
@@ -215,7 +215,7 @@ class OptimizedRONASMISTrainer(RONASMISTrainer):
         
         child_net.train()
         
-        # Training loop following paper
+        # Training loop following design
         for epoch in range(epochs):
             for batch_idx, (data, target) in enumerate(train_loader):
                 if batch_idx >= self.config.max_batches_per_child:
@@ -223,7 +223,7 @@ class OptimizedRONASMISTrainer(RONASMISTrainer):
                 
                 data, target = data.to(self.device), target.to(self.device)
                 
-                # Adapt to architecture's patch size (as per RONASMIS)
+                # Adapt to architecture's patch size (as per PRISM)
                 data, target = self._adapt_to_patch_size(data, target, architecture, patch_sizes)
                 
                 optimizer.zero_grad()
@@ -243,7 +243,7 @@ class OptimizedRONASMISTrainer(RONASMISTrainer):
                     loss.backward()
                     optimizer.step()
         
-        # Update shared weights (key RONASMIS step)
+        # Update shared weights (key PRISM step)
         self.param_manager.update_shared_weights(child_net)
         
         # Validation
@@ -304,17 +304,17 @@ def create_data_loaders(preprocessed_dir: str, batch_size: int = 2,
     
     return train_loader, val_loader
 
-def run_ronasmis_training(args):
-    """Main RONASMIS training function"""
+def run_prism_training(args):
+    """Main PRISM training function"""
     
     print("=" * 60)
-    print("🧠 RONASMIS Architecture Search")
-    print("Following MICCAI 2019 paper exactly")
+    print("🧠 PRISM Architecture Search")
+    print("Following  exactly")
     print("=" * 60)
     
     # Setup
     device = setup_gpu_optimization()
-    config = OptimizedRONASMISConfig()
+    config = OptimizedPRISMConfig()
     
     # Create data loaders
     train_loader, val_loader = create_data_loaders(
@@ -324,7 +324,7 @@ def run_ronasmis_training(args):
     )
     
     # Initialize trainer
-    trainer = OptimizedRONASMISTrainer(config, device)
+    trainer = OptimizedPRISMTrainer(config, device)
     
     print(f"🎯 Starting search with {config.episodes} episodes...")
     
@@ -335,7 +335,7 @@ def run_ronasmis_training(args):
         # Save results and model
         save_results_and_model(results, trainer, args)
         
-        print("🎉 RONASMIS training completed successfully!")
+        print("🎉 PRISM training completed successfully!")
         return results
         
     except Exception as e:
@@ -344,7 +344,7 @@ def run_ronasmis_training(args):
         traceback.print_exc()
         return None
 
-def save_results_and_model(results: Dict, trainer: OptimizedRONASMISTrainer, args):
+def save_results_and_model(results: Dict, trainer: OptimizedPRISMTrainer, args):
     """Save training results and best model"""
     
     output_dir = Path(args.output_dir) / args.exp_name
@@ -363,7 +363,7 @@ def save_results_and_model(results: Dict, trainer: OptimizedRONASMISTrainer, arg
     
     # Save best model (KEY REQUIREMENT)
     if trainer.best_model_state:
-        model_file = output_dir / "best_ronasmis_model.pt"
+        model_file = output_dir / "best_prism_model.pt"
         torch.save({
             'model_state_dict': trainer.best_model_state['model_state_dict'],
             'shared_weights': trainer.best_model_state['shared_weights'],
@@ -384,12 +384,12 @@ def save_results_and_model(results: Dict, trainer: OptimizedRONASMISTrainer, arg
     print(f"📋 Results saved to: {output_dir}")
 
 def main():
-    parser = argparse.ArgumentParser(description='RONASMIS Training')
+    parser = argparse.ArgumentParser(description='PRISM Training')
     parser.add_argument('--preprocessed_dir', type=str, default='preprocessed_dwi_data',
                        help='Directory with preprocessed .pt files')
     parser.add_argument('--output_dir', type=str, default='./experiments',
                        help='Output directory for results')
-    parser.add_argument('--exp_name', type=str, default='ronasmis_search',
+    parser.add_argument('--exp_name', type=str, default='prism_search',
                        help='Experiment name')
     parser.add_argument('--num_workers', type=int, default=4,
                        help='Number of data loading workers')
@@ -405,7 +405,7 @@ def main():
         return
     
     # Run training
-    results = run_ronasmis_training(args)
+    results = run_prism_training(args)
     
     if results:
         print("✅ Training completed successfully!")

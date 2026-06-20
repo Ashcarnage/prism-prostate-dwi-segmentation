@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-RONASMIS Model Testing and Inference Script
-Tests the trained RONASMIS model and exports results in .nrrd format
+PRISM Model Testing and Inference Script
+Tests the trained PRISM model and exports results in .nrrd format
 """
 
 import os
@@ -16,9 +16,9 @@ from pathlib import Path
 import time
 from typing import Dict, Tuple, Optional
 
-# Import RONASMIS components
-from ronasmis import (
-    RONASMISConfig, ChildNetwork, DiceLoss
+# Import PRISM components
+from prism import (
+    PRISMConfig, ChildNetwork, DiceLoss
 )
 
 def setup_gpu_optimization():
@@ -33,10 +33,10 @@ def setup_gpu_optimization():
     
     return device
 
-class RONASMISInference:
-    """Class for RONASMIS model inference and testing"""
+class PRISMInference:
+    """Class for PRISM model inference and testing"""
     
-    def __init__(self, model_path: str = "experiments/ronasmis_search/best_ronasmis_model.pt"):
+    def __init__(self, model_path: str = "experiments/prism_search/best_prism_model.pt"):
         self.model_path = Path(model_path)
         self.device = setup_gpu_optimization()
         
@@ -60,7 +60,7 @@ class RONASMISInference:
         print(f"   Skip connections: {self.architecture['skip_connections']}")
         
         # Create config from saved data
-        self.config = RONASMISConfig()
+        self.config = PRISMConfig()
         if 'config' in self.checkpoint:
             # Update config with saved values
             for key, value in self.checkpoint['config'].items():
@@ -280,9 +280,9 @@ def main():
     """Main testing function"""
     import argparse
     
-    parser = argparse.ArgumentParser(description='RONASMIS Model Testing')
+    parser = argparse.ArgumentParser(description='PRISM Model Testing')
     parser.add_argument('--model_path', type=str, 
-                       default='experiments/ronasmis_search/best_ronasmis_model.pt',
+                       default='experiments/prism_search/best_prism_model.pt',
                        help='Path to trained model')
     parser.add_argument('--preprocessed_dir', type=str, 
                        default='preprocessed_dwi_data',
@@ -294,12 +294,12 @@ def main():
     args = parser.parse_args()
     
     print("=" * 60)
-    print("🧪 RONASMIS Model Testing")
+    print("🧪 PRISM Model Testing")
     print("=" * 60)
     
     try:
         # Initialize inference
-        inference = RONASMISInference(args.model_path)
+        inference = PRISMInference(args.model_path)
         
         # Create model
         model = inference.create_model()
